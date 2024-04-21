@@ -1,9 +1,11 @@
 package org.example.infrastructure.database.repository;
 
+import com.sun.source.tree.LiteralTree;
 import org.example.business.dao.menagement.CarDealershipManagementDAO;
 import org.example.infrastructure.configuration.HibernateUtil;
 import org.hibernate.Session;
 
+import java.util.List;
 import java.util.Objects;
 
 public class CarDealershipManagementRepository implements CarDealershipManagementDAO {
@@ -29,6 +31,23 @@ public class CarDealershipManagementRepository implements CarDealershipManagemen
             session.createMutationQuery("DELETE FROM AddressEntity ent").executeUpdate();
             session.createMutationQuery("DELETE FROM SalesmanEntity ent").executeUpdate();
 
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void saveAll(List<?> entities) {
+
+        try (Session session = HibernateUtil.getSession()) {
+            if (Objects.isNull(session)) {
+                throw new RuntimeException("Session is null");
+            }
+            session.beginTransaction();
+            for (var entity : entities) {
+                session.persist(entity);
+            }
+
+            
             session.getTransaction().commit();
         }
     }

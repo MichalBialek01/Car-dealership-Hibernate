@@ -2,6 +2,7 @@ package org.example;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.business.menagement.CarDealershipManagementService;
+import org.example.business.menagement.DataPreparationService;
 import org.example.business.menagement.InputDataCache;
 import org.example.infrastructure.configuration.HibernateUtil;
 import org.example.infrastructure.database.repository.CarDealershipManagementRepository;
@@ -18,7 +19,8 @@ public class CarDealershipTest {
     @BeforeEach
     void beforeEach(){
         this.carDealershipMenagementService= new CarDealershipManagementService(
-                new CarDealershipManagementRepository()
+                new CarDealershipManagementRepository(),
+                new DataPreparationService()
         );
     }
 
