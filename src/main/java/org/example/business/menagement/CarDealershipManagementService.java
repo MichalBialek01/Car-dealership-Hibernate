@@ -8,13 +8,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CarDealershipManagementService {
 
-private final CarDealershipManagementDAO carDealershipMenagementDAO;
+private final CarDealershipManagementDAO carDealershipManagementDAO;
 private final DataPreparationService dataPreparationService;
     public void purge(){
-        carDealershipMenagementDAO.purge();
+        carDealershipManagementDAO.purge();
     }
     public void init(){
-            List<?> entities = dataPreparationService.prepareInitDat();
-            carDealershipMenagementDAO.saveAll(entities);
+            List<?> entities = dataPreparationService.prepareInitData();
+            carDealershipManagementDAO.saveAll(entities);
     }
 }

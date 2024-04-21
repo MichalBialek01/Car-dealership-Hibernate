@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,9 +48,14 @@ public class InputDataCache {
     public static <T> List<T> getInputData(
             final Keys.InputDataGroup inputDataGroup,
             final Keys.Entity entity,
-            final Function<String,T> mapper
-            ){
-        return inputData;
+            final Function<String, T> mapper
+    ) {
+        return Optional.ofNullable(inputData.get(inputDataGroup.toString()))
+                .orElse(List.of())
+                .stream()
+                .filter(line -> line.startsWith(entity.toString()))
+                .map(mapper)
+                .toList();
     }
 
 }

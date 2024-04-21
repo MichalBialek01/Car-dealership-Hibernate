@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public class DataPreparationService {
 
-    public List<?> prepareInitDat() {
+    public List<?> prepareInitData() {
         List< SalesmanEntity> salesman = InputDataCache.getInputData(
                 Keys.InputDataGroup.INIT,
                 Keys.Entity.SALESMAN,

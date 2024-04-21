@@ -37,7 +37,6 @@ public class CarDealershipManagementRepository implements CarDealershipManagemen
 
     @Override
     public void saveAll(List<?> entities) {
-
         try (Session session = HibernateUtil.getSession()) {
             if (Objects.isNull(session)) {
                 throw new RuntimeException("Session is null");
@@ -46,8 +45,6 @@ public class CarDealershipManagementRepository implements CarDealershipManagemen
             for (var entity : entities) {
                 session.persist(entity);
             }
-
-            
             session.getTransaction().commit();
         }
     }
