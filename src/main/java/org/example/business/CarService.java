@@ -3,6 +3,7 @@ package org.example.business;
 import lombok.AllArgsConstructor;
 import org.example.business.dao.menagement.CarDAO;
 import org.example.infrastructure.database.entity.CarToBuyEntity;
+import org.example.infrastructure.database.entity.CarToServiceEntity;
 
 import java.util.Optional;
 @AllArgsConstructor
@@ -15,5 +16,9 @@ public class CarService {
             throw new RuntimeException("Provided car with vin: [%s] doesn't exist".formatted(vin));
         }
         return carToBuyByVin.get();
+    }
+
+    public Optional<CarToServiceEntity> findCarToService(String vin) {
+        return carDAO.findCarToServiceByVin(vin);
     }
 }

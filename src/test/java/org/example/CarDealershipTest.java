@@ -5,7 +5,11 @@ import org.example.business.CarPurchaseService;
 import org.example.business.CarService;
 import org.example.business.CustomerService;
 import org.example.business.SalesmanService;
+import org.example.business.dao.menagement.CarDAO;
+import org.example.business.dao.menagement.CustomerDAO;
+import org.example.business.dao.menagement.SalesmanDAO;
 import org.example.business.menagement.CarDealershipManagementService;
+import org.example.business.menagement.CarServiceRequestService;
 import org.example.business.menagement.DataPreparationService;
 import org.example.infrastructure.configuration.HibernateUtil;
 import org.example.infrastructure.database.repository.CarDealershipManagementRepository;
@@ -20,19 +24,27 @@ public class CarDealershipTest {
 
     private CarDealershipManagementService carDealershipManagementService;
     private CarPurchaseService carPurchaseService;
+    private CarServiceRequestService carServiceRequestService;
+    CarDAO carDAO = new CarRepository();
+    SalesmanDAO salesmanDAO = new SalesmanRepository();
+    CustomerDAO customerDAO = new CustomerRepository();
+    DataPreparationService dataPreparationService = new DataPreparationService();
 
     @BeforeEach
     void beforeEach() {
         this.carDealershipManagementService = new CarDealershipManagementService(
                 new CarDealershipManagementRepository(),
-                new DataPreparationService()
+                dataPreparationService
         );
         this.carPurchaseService = new CarPurchaseService(
-                new DataPreparationService(),
-                new CustomerService(new CustomerRepository()),
-                new CarService(new CarRepository()),
-                new SalesmanService(new SalesmanRepository())
+                dataPreparationService,
+                new CustomerService(customerDAO),
+                new CarService(carDAO),
+                new SalesmanService(salesmanDAO)
 
+        );
+        this.carServiceRequestService = new CarServiceRequestService(
+                dataPreparationService
         );
     }
 
@@ -65,6 +77,7 @@ public class CarDealershipTest {
     @Test
     void makeServiceRequest() {
         log.info("### Running order 4");
+        carServiceRequestService.requestService();
     }
 
     @Order(5)
