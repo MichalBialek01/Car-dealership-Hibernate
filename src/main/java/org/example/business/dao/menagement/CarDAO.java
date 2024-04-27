@@ -9,4 +9,6 @@ public interface CarDAO {
     Optional<CarToBuyEntity> findCarToBuyByVin(String vin);
 
     Optional<CarToServiceEntity> findCarToServiceByVin(String vin);
+
+    CarToServiceEntity saveCarToService(CarToServiceEntity entity);
 }

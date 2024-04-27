@@ -10,10 +10,10 @@ import java.util.Objects;
 @Value
 @Builder
 public class CarServiceRequest {
+
     Customer customer;
     Car car;
     String customerComment;
-
 
     @With
     @Value
@@ -24,7 +24,6 @@ public class CarServiceRequest {
         String phone;
         String email;
         Address address;
-
     }
 
     @With
@@ -46,13 +45,10 @@ public class CarServiceRequest {
         String model;
         Integer year;
 
-        public Boolean shouldExisitInCarToBuy() {
-            return Objects.isNull(vin)
-                    && Objects.isNull(brand)
+        public Boolean shouldExistInCarToBuy() {
+            return Objects.isNull(brand)
+                    && Objects.isNull(model)
                     && Objects.isNull(year);
         }
-
     }
-
-
 }

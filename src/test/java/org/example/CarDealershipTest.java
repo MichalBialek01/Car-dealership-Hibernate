@@ -1,15 +1,11 @@
 package org.example;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.business.CarPurchaseService;
-import org.example.business.CarService;
-import org.example.business.CustomerService;
-import org.example.business.SalesmanService;
+import org.example.business.*;
 import org.example.business.dao.menagement.CarDAO;
 import org.example.business.dao.menagement.CustomerDAO;
 import org.example.business.dao.menagement.SalesmanDAO;
 import org.example.business.menagement.CarDealershipManagementService;
-import org.example.business.menagement.CarServiceRequestService;
 import org.example.business.menagement.DataPreparationService;
 import org.example.infrastructure.configuration.HibernateUtil;
 import org.example.infrastructure.database.repository.CarDealershipManagementRepository;
@@ -36,15 +32,19 @@ public class CarDealershipTest {
                 new CarDealershipManagementRepository(),
                 dataPreparationService
         );
+        CarService carService = new CarService(carDAO);
+        CustomerService customerService = new CustomerService(customerDAO);
         this.carPurchaseService = new CarPurchaseService(
                 dataPreparationService,
-                new CustomerService(customerDAO),
-                new CarService(carDAO),
+                customerService,
+                carService,
                 new SalesmanService(salesmanDAO)
 
         );
         this.carServiceRequestService = new CarServiceRequestService(
-                dataPreparationService
+                dataPreparationService,
+                carService
+                ,customerService
         );
     }
 

@@ -83,5 +83,17 @@ public class CarRepository implements CarDAO {
         }
 
     }
+    @Override
+    public CarToServiceEntity saveCarToService(CarToServiceEntity entity) {
+        try (Session session = HibernateUtil.getSession()) {
+            if (Objects.isNull(session)) {
+                throw new RuntimeException("Session is null");
+            }
+            session.beginTransaction();
+            session.persist(entity);
+            session.getTransaction().commit();
+            return entity;
+        }
+    }
 }
 
