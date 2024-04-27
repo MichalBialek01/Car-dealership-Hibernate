@@ -1,6 +1,7 @@
 package org.example.business;
 
 import lombok.AllArgsConstructor;
+import org.example.business.dao.menagement.CarServiceRequestDAO;
 import org.example.business.menagement.DataPreparationService;
 import org.example.domain.CarServiceRequest;
 import org.example.infrastructure.database.entity.CarServiceRequestEntity;
@@ -10,10 +11,7 @@ import org.example.infrastructure.database.entity.CustomerEntity;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -21,6 +19,7 @@ public class CarServiceRequestService {
     private final DataPreparationService dataPreparationService;
     private final CarService carService;
     private final CustomerService customerService;
+    private final CarServiceRequestDAO carServiceRequestDAO;
 
     public void requestService() {
         // We distinguish 2 cases: 1 if car to service and client already exist is on database, and second if client and car are external guests.
@@ -90,5 +89,12 @@ public class CarServiceRequestService {
         CarServiceRequestEntity carToServiceRequestEntity = buildCarServiceRequestEntity(request, car, customer);
         customer.addServiceRequest(carToServiceRequestEntity);
         customerService.saveServiceRequest(customer);
+    }
+
+    public CarServiceRequestEntity findAnyActiveRequest(String carVin) {
+        Set<CarServiceRequestEntity> serviceRequests =  carServiceRequestDAO.findActiveServiceRequestsByCarVin(carVin);
+         return serviceRequests.stream()
+                 .findAny()
+                 .orElseThrow( ()-> new RuntimeException("Could not find service request for car with VIN number: [%s] ".formatted(carVin)));
     }
 }

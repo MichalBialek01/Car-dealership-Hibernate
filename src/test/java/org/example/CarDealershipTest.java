@@ -2,16 +2,11 @@ package org.example;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.business.*;
-import org.example.business.dao.menagement.CarDAO;
-import org.example.business.dao.menagement.CustomerDAO;
-import org.example.business.dao.menagement.SalesmanDAO;
+import org.example.business.dao.menagement.*;
 import org.example.business.menagement.CarDealershipManagementService;
 import org.example.business.menagement.DataPreparationService;
 import org.example.infrastructure.configuration.HibernateUtil;
-import org.example.infrastructure.database.repository.CarDealershipManagementRepository;
-import org.example.infrastructure.database.repository.CarRepository;
-import org.example.infrastructure.database.repository.CustomerRepository;
-import org.example.infrastructure.database.repository.SalesmanRepository;
+import org.example.infrastructure.database.repository.*;
 import org.junit.jupiter.api.*;
 
 @Slf4j
@@ -21,30 +16,56 @@ public class CarDealershipTest {
     private CarDealershipManagementService carDealershipManagementService;
     private CarPurchaseService carPurchaseService;
     private CarServiceRequestService carServiceRequestService;
-    CarDAO carDAO = new CarRepository();
-    SalesmanDAO salesmanDAO = new SalesmanRepository();
-    CustomerDAO customerDAO = new CustomerRepository();
-    DataPreparationService dataPreparationService = new DataPreparationService();
+    private CarServiceProcessingService carServiceProcessingService;
+    private CarService carService;
+
 
     @BeforeEach
     void beforeEach() {
+        CarDealershipManagementRepository carDealershipManagementDAO = new CarDealershipManagementRepository();
+        CarDAO carDAO = new CarRepository();
+        SalesmanDAO salesmanDAO = new SalesmanRepository();
+        CustomerDAO customerDAO = new CustomerRepository();
+        MechanicDAO mechanicDAO = new MechanicRepository();
+        ServiceDAO serviceDAO = new ServiceRepository();
+        PartDAO partDAO = new PartRepository();
+        CarServiceRequestDAO carServiceRequestDAO = new CarServiceRequestRepository();
+        DataPreparationService dataPreparationService = new DataPreparationService();
+        ServiceCatalogService serviceCatalogService = new ServiceCatalogService(serviceDAO);
+        PartCatalogService partCatalogService = new PartCatalogService(partDAO);
+        CarService carService = new CarService(carDAO);
+        ServiceRequestProcessingDAO serviceRequestProcessingDAO = new ServiceRequestProcessingRepository();
+        CustomerService customerService = new CustomerService(customerDAO);
+        SalesmanService salesmanService = new SalesmanService(salesmanDAO);
+        MechanicService mechanicService = new MechanicService(mechanicDAO);
+
         this.carDealershipManagementService = new CarDealershipManagementService(
-                new CarDealershipManagementRepository(),
+                carDealershipManagementDAO,
                 dataPreparationService
         );
-        CarService carService = new CarService(carDAO);
-        CustomerService customerService = new CustomerService(customerDAO);
         this.carPurchaseService = new CarPurchaseService(
                 dataPreparationService,
                 customerService,
                 carService,
-                new SalesmanService(salesmanDAO)
-
+                salesmanService
         );
         this.carServiceRequestService = new CarServiceRequestService(
                 dataPreparationService,
-                carService
-                ,customerService
+                carService,
+                customerService,
+                carServiceRequestDAO
+        );
+        this.carServiceProcessingService = new CarServiceProcessingService(
+                dataPreparationService,
+                mechanicService,
+                carService,
+                carServiceRequestService,
+                serviceCatalogService,
+                partCatalogService,
+                serviceRequestProcessingDAO
+        );
+        this.carService = new CarService(
+                carDAO
         );
     }
 
@@ -84,11 +105,13 @@ public class CarDealershipTest {
     @Test
     void processServiceRequests() {
         log.info("### Running order 5");
+        carServiceProcessingService.process();
     }
 
     @Test
     void printCarHistory() {
         log.info("### Running order 6");
+        carService.printCarHistory("2C3CDYAG2DH731952");
     }
 
 

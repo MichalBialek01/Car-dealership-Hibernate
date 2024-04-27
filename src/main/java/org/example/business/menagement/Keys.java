@@ -1,21 +1,25 @@
 package org.example.business.menagement;
 
 public interface Keys {
-    enum InputDataGroup{
+    enum InputDataGroup {
         INIT,
         BUY_FIRST_TIME,
         SERVICE_REQUEST,
-        BUY_AGAIN
+        BUY_AGAIN,
+        DO_THE_SERVICE;
     }
-    enum Entity{
-         SALESMAN,
+
+    enum Entity {
+        SALESMAN,
         CUSTOMER,
         MECHANIC,
         CAR,
         SERVICE,
         PART
     }
-    enum Constant{
-        WHAT
+
+    enum Constant {
+        WHAT,
+        FINISHED
     }
 }

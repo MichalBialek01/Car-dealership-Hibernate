@@ -3,6 +3,7 @@ package org.example.business;
 import lombok.AllArgsConstructor;
 import org.example.business.dao.menagement.CarDAO;
 import org.example.domain.CarServiceRequest;
+import org.example.infrastructure.database.entity.CarHistoryEntity;
 import org.example.infrastructure.database.entity.CarToBuyEntity;
 import org.example.infrastructure.database.entity.CarToServiceEntity;
 
@@ -43,5 +44,8 @@ public class CarService {
         return carDAO.saveCarToService(entity);
     }
 
-    
+
+    public void printCarHistory(String vinNumber) {
+        CarHistoryEntity carHistoryEntity = carDAO.findCarHistoryByVin(vinNumber);
+    }
 }

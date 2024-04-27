@@ -1,5 +1,6 @@
 package org.example.business.menagement;
 
+import org.example.domain.CarServiceProcessingRequest;
 import org.example.domain.CarServiceRequest;
 import org.example.infrastructure.database.entity.*;
 
@@ -107,13 +108,13 @@ public class DataPreparationService {
     }
 
     private CarServiceRequest.Car createCar(List<String> inputData) {
-        if(inputData.size()==1){
+        if (inputData.size() == 1) {
             return CarServiceRequest.Car
                     .builder()
                     .vin(inputData.get(0))
                     .build();
         }
-        return  CarServiceRequest.Car.builder()
+        return CarServiceRequest.Car.builder()
                 .vin(inputData.get(0))
                 .brand(inputData.get(1))
                 .model(inputData.get(2))
@@ -123,7 +124,7 @@ public class DataPreparationService {
 
     private CarServiceRequest.Customer createCustomer(List<String> inputData) {
 
-        if(inputData.size()==1) {
+        if (inputData.size() == 1) {
             return CarServiceRequest.Customer
                     .builder()
                     .email(inputData.get(0))
@@ -144,6 +145,28 @@ public class DataPreparationService {
                                 .address(inputData.get(7))
                                 .build()
                 )
+                .build();
+    }
+
+    public List<CarServiceProcessingRequest> prepareServiceRequestToProcess() {
+        return InputDataCache.getInputData(Keys.InputDataGroup.DO_THE_SERVICE, this::prepareMap)
+                .stream()
+                .map(this::createCarServiceRequestToProcess)
+                .toList();
+    }
+
+    private CarServiceProcessingRequest createCarServiceRequestToProcess(Map<String, List<String>> inputData) {
+        List<String> what = inputData.get(Keys.Constant.WHAT.toString());
+        return CarServiceProcessingRequest
+                .builder()
+                .mechnicPesel(inputData.get(Keys.Entity.MECHANIC.toString()).get(0))
+                .carVin(inputData.get(Keys.Entity.CAR.toString()).get(0))
+                .partSerialNumber(Optional.of(what.get(0)).filter(part -> !part.isBlank()).orElse(null))
+                .partQuantity(Optional.ofNullable(what.get(1)).filter(value -> !value.isBlank()).map(Integer::parseInt).orElse(null))
+                .serviceCode(what.get(2))
+                .hours(Integer.parseInt(what.get(3)))
+                .comment(what.get(4))
+                .done(what.get(5))
                 .build();
     }
 }

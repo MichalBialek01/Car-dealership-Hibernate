@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.ParameterExpression;
 import jakarta.persistence.criteria.Root;
 import org.example.business.dao.menagement.CarDAO;
 import org.example.infrastructure.configuration.HibernateUtil;
+import org.example.infrastructure.database.entity.CarHistoryEntity;
 import org.example.infrastructure.database.entity.CarToBuyEntity;
 import org.example.infrastructure.database.entity.CarToServiceEntity;
 import org.hibernate.Session;
@@ -94,6 +95,26 @@ public class CarRepository implements CarDAO {
             session.getTransaction().commit();
             return entity;
         }
+    }
+
+    @Override
+    public CarHistoryEntity findCarHistoryByVin(String vinNumber) {
+        //TODO
+//        try (Session session = HibernateUtil.getSession()) {
+//            if (Objects.isNull(session)) {
+//                throw new RuntimeException("Session is null");
+//            }
+//            session.beginTransaction();
+//
+//            String hqlQuery = """
+//                    SELECT * FROM car_service_request car
+//                    WHERE car.
+//
+//                    """
+//
+//            session.getTransaction().commit();
+//            return entity;
+//        }
     }
 }
 
