@@ -8,6 +8,7 @@ import org.example.infrastructure.configuration.HibernateUtil;
 import org.example.infrastructure.database.entity.CarHistoryEntity;
 import org.example.infrastructure.database.entity.CarToBuyEntity;
 import org.example.infrastructure.database.entity.CarToServiceEntity;
+import org.example.infrastructure.database.entity.ServiceEntity;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
@@ -99,22 +100,32 @@ public class CarRepository implements CarDAO {
 
     @Override
     public CarHistoryEntity findCarHistoryByVin(String vinNumber) {
-        //TODO
-//        try (Session session = HibernateUtil.getSession()) {
-//            if (Objects.isNull(session)) {
-//                throw new RuntimeException("Session is null");
-//            }
-//            session.beginTransaction();
+
+        try (Session session = HibernateUtil.getSession()) {
+            if (Objects.isNull(session)) {
+                throw new RuntimeException("Session is null");
+            }
+            session.beginTransaction();
+//             //TODO - funcionality soon
+//            HibernateCriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//            CriteriaQuery<CarToBuyEntity> criteriaQuery = criteriaBuilder.createQuery(CarToBuyEntity.class);
+//            Root<CarToBuyEntity> root = criteriaQuery.from(CarToBuyEntity.class);
 //
-//            String hqlQuery = """
-//                    SELECT * FROM car_service_request car
-//                    WHERE car.
+//            ParameterExpression<String> parameter1 = criteriaBuilder.parameter(String.class);
+//            criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("vinNumber"), parameter1));
 //
-//                    """
-//
-//            session.getTransaction().commit();
-//            return entity;
-//        }
+//            Query<CarToBuyEntity> query = session.createQuery(criteriaQuery);
+//            query.setParameter(parameter1,vinNumber);
+//            try {
+//                CarToBuyEntity result = query.getSingleResult();
+//                CarHistoryEntity
+//                        .builder()
+//                        .carVin(result.getVin())
+//                        .serviceRequests(result.getCa)
+//                        .build()
+            session.getTransaction().commit();
+            return CarHistoryEntity.builder().build();
+        }
     }
 }
 

@@ -9,6 +9,11 @@ import org.example.infrastructure.configuration.HibernateUtil;
 import org.example.infrastructure.database.repository.*;
 import org.junit.jupiter.api.*;
 
+/*
+    Test class to enforce defined program path.
+    Typically test classes shouldn't be used in this way, but for this particular example it does.
+
+ */
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CarDealershipTest {
